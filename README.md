@@ -11,8 +11,8 @@ Package | Version | Description
 [bs4](https://pypi.org/project/beautifulsoup4/) |4.7.1| HTML Parser 
 [click](https://pypi.org/project/click/) |7.0| Command line args
 [time](https://docs.python.org/2/library/time.html) |n/a| Time related functions
-[csv](https://docs.python.org/2/library/csv.html) |1.0| Charting
-[os](https://docs.python.org/2/library/os.html) |n/a| Server-side web framework
+[csv](https://docs.python.org/2/library/csv.html) |1.0| CSV operations
+[os](https://docs.python.org/2/library/os.html) |n/a| File system utils 
 [logging](https://docs.python.org/2/library/logging.html) | 0.5.1.2 | Logging
 [re](https://expressjs.com/) |2.2.1| Regex operations
 
