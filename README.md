@@ -10,7 +10,6 @@ Package | Version | Description
 [selenium](https://pypi.org/project/selenium/) |3.141.0| Web Driver 
 [bs4](https://pypi.org/project/beautifulsoup4/) |4.7.1| HTML Parser 
 [click](https://pypi.org/project/click/) |7.0| Command line args
-
 [time](https://docs.python.org/2/library/time.html) |n/a| Time related functions
 [csv](https://docs.python.org/2/library/csv.html) |1.0| Charting
 [os](https://docs.python.org/2/library/os.html) |n/a| Server-side web framework
