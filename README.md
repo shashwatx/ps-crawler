@@ -2,6 +2,13 @@
 
 Crawls Playstore reviews using Selenium.
 
+**Note:** Some reviews are trimmed and terminate with _...Full Review_ (which is a _button_ element).
+I have modified the script to do the following right before dumping the reviews to file.
+ 1. Find all "Full Review" buttons.
+ 2. For each button
+   * scroll to bring the button in viewport.
+   * click on button.
+
 ## Required packages
 
 Package | Version | Description
