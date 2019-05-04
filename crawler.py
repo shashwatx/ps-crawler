@@ -30,6 +30,12 @@ report_pool_size=5
 # skip title if enough reviews found.
 reviewLimit=12000
 
+# If we scroll to the exact y of any "Full Review" button,
+# we cannot click it as the Navbar's Home button lays on top
+# of our button.
+# A workaround is to scroll button.y - offset
+scrollOffset=100
+
 
 def obtainOutputFileName(appCounter,s):
     s=re.sub(r"[^\w\s]",'',s)
@@ -118,10 +124,17 @@ def run(input_,output,driver_):
         num_buttons=len(full_review_buttons)
         logger.info('Found %d reviews to expand',num_buttons)
 
+
+        # scroll to the very top
+        logger.info('Will scroll to top.')
+        driver.execute_script("window.scrollTo(0, 0);")
+
+        time.sleep(2)
+
         # click on all "Full Review" buttons
         for idx,btn in enumerate(full_review_buttons):
             logger.info('Expanding review #%d',idx)
-            driver.execute_script('window.scrollTo(0, ' + str(btn.location['y']) + ');')
+            driver.execute_script('window.scrollTo(0, ' + str(btn.location['y']-scrollOffset) + ');')
             btn.click()
             time.sleep(1)
 
