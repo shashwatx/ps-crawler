@@ -18,6 +18,9 @@ import click
 # prefix for output files
 namePrefix='app'
 
+# suffix for output files
+nameSuffix='.csv'
+
 # missing suffix in the array
 urlSuffix='&showAllReviews=true'
 
@@ -40,7 +43,7 @@ scrollOffset=100
 def obtainOutputFileName(appCounter,s):
     s=re.sub(r"[^\w\s]",'',s)
     s=re.sub(r"[\s+]",'-',s)
-    outputFileName=namePrefix+'_'+str(appCounter)+'_'+s
+    outputFileName=namePrefix+'_'+str(appCounter)+'_'+s+'.csv'
     return outputFileName
 
 def readInputFile(pathToInputFile):
@@ -48,6 +51,21 @@ def readInputFile(pathToInputFile):
         text = f.read()
         listOfURLS=text.splitlines()
     return listOfURLS
+
+def getComment(soup):
+
+    # if review is short this is where the content lies
+    comment_trimmed=soup.find('span',jsname='bN97Pc').text
+
+    # if review is trimmed, the full content is not put
+    # in the expected element.
+    # Instead, an element that was previously empty is populated
+    # with the full content.
+    comment_expanded=soup.find('span',jsname='fbQN7e').text
+
+    # to handle both type of reviews
+    comment_to_return=comment_expanded if len(comment_expanded)>0 else comment_trimmed
+    return comment_to_return
 
 @click.command()
 @click.option('--input', '-i', 'input_', required=True, type=click.Path(exists=True))
@@ -138,12 +156,11 @@ def run(input_,output,driver_):
             btn.click()
             time.sleep(1)
 
-
         logger.warn('Finished gathering reviews for title %s',title)
         logger.info('dumping reviews to file...')
 
         # dump all reviews to file
-        with open(outputFile+'.csv', mode='wb') as file:
+        with open(outputFile, mode='wb') as file:
             writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             writer.writerow(["name","ratings","date","helpful vote","comment"])
             for review in reviews:
@@ -153,13 +170,13 @@ def run(input_,output,driver_):
                     ratings=soup.find('div',role='img').get('aria-label').strip("Rated ")[0]
                     date=soup.find(class_="p2TkOb").text
                     helpful=soup.find(class_="jUL89d y92BAb").text
-                    comment=soup.find('span',jsname='bN97Pc').text
+                    comment=getComment(soup)
                     writer.writerow([name.encode('utf-8'),ratings,date,helpful,comment.encode('utf-8')])
 
                 except Exception , e:
                     logger.error('Encountered exception: %s',str(e))
 
-        logger.warn('All reviews dumped to file %s.',outputFile)
+        logger.warn('All reviews dumped to file %s',outputFile)
 
 if __name__ == "__main__":
     run()
