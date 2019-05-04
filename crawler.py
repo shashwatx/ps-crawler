@@ -113,6 +113,21 @@ def run(input_,output,driver_):
         # find all reviews
         reviews=driver.find_elements_by_xpath("//*[@jsname='fk8dgd']//div[@class='d15Mdf bAhLNe']")
 
+        # find all "Full Review" buttons.
+        full_review_buttons=driver.find_elements_by_xpath("//button[@jsname='gxjVle']")
+        num_buttons=len(full_review_buttons)
+        logger.info('Found %d reviews to expand',num_buttons)
+
+        # click on all "Full Review" buttons
+        for idx,btn in enumerate(full_review_buttons):
+            logger.info('Expanding review #%d',idx)
+            driver.execute_script('window.scrollTo(0, ' + str(btn.location['y']) + ');')
+            btn.click()
+            time.sleep(1)
+
+
+        logger.warn('Finished gathering reviews for title %s',title)
+        logger.info('dumping reviews to file...')
 
         # dump all reviews to file
         with open(outputFile+'.csv', mode='wb') as file:
