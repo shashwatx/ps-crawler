@@ -43,7 +43,7 @@ scrollOffset=100
 def obtainOutputFileName(appCounter,s):
     s=re.sub(r"[^\w\s]",'',s)
     s=re.sub(r"[\s+]",'-',s)
-    outputFileName=namePrefix+'_'+str(appCounter)+'_'+s+'.csv'
+    outputFileName=namePrefix+'_'+str(appCounter).rjust(2, '0')+'_'+s+'.csv'
     return outputFileName
 
 def readInputFile(pathToInputFile):
