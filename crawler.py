@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 
-import coloredlogs
-coloredlogs.install()
+import coloredlogs, logging
+logger = logging.getLogger(__name__)
+coloredlogs.install(logger=logger,
+                    level='INFO',
+                    fmt='%(asctime)s %(hostname)s %(name)s[%(process)d] %(levelname)s %(message)s')
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
@@ -10,9 +14,6 @@ import re
 import time
 import csv
 import os
-import logging
-logging.basicConfig(filename='execution.log',level=logging.INFO)
-logger = logging.getLogger("main")
 import click
 
 # prefix for output files
@@ -73,6 +74,12 @@ def getComment(soup):
 @click.option('--driver', '-d', 'driver_', required=True, type=click.Path(exists=True))
 def run(input_,output,driver_):
     """Simple spider to get Playstore reviews."""
+
+    # create output directory if it does not exit.
+    if not os.path.exists(output):
+        logger.warn('Output directory %s does not exist.', output)
+        os.makedirs(output)
+        logger.warn('I have created the output directory.', output)
 
     logger.info('Input: %s.',os.path.expanduser(input_))
     listOfURLS=readInputFile(input_)
