@@ -70,7 +70,7 @@ def getComment(soup):
 
 @click.command()
 @click.option('--input', '-i', 'input_', required=True, type=click.Path(exists=True))
-@click.option('--output', '-o', required=True, type=click.Path(exists=True))
+@click.option('--output', '-o', required=True, type=click.Path(exists=False))
 @click.option('--driver', '-d', 'driver_', required=True, type=click.Path(exists=True))
 def run(input_,output,driver_):
     """Simple spider to get Playstore reviews."""
@@ -79,7 +79,7 @@ def run(input_,output,driver_):
     if not os.path.exists(output):
         logger.warn('Output directory %s does not exist.', output)
         os.makedirs(output)
-        logger.warn('I have created the output directory.', output)
+        logger.warn('I have created the output directory: %s', output)
 
     logger.info('Input: %s.',os.path.expanduser(input_))
     listOfURLS=readInputFile(input_)
