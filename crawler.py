@@ -88,6 +88,7 @@ def run(input_,output,driver_):
 
     logger.info('Web Driver: %s.',os.path.expanduser(driver_))
     chrome_options = Options()
+    chrome_options.headless = True
     driver = webdriver.Chrome(executable_path=os.path.realpath(driver_), chrome_options=chrome_options)
 
     appCounter=-1
@@ -125,7 +126,7 @@ def run(input_,output,driver_):
             # "Show More" should now appear
             try:
                 loadMore=driver.find_element_by_xpath("//*[contains(@class,'U26fgb O0WRkf oG5Srb C0oVfc n9lfJ')]").click()
-            except Exception , e:
+            except Exception as e:
                 logger.error('Encountered exception: %s',type(e))
                 flag=flag+1
                 logger.debug('Flag is now %d.',flag)
@@ -167,7 +168,7 @@ def run(input_,output,driver_):
         logger.info('dumping reviews to file...')
 
         # dump all reviews to file
-        with open(outputFile, mode='wb') as file:
+        with open(outputFile, mode='w') as file:
             writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             writer.writerow(["name","ratings","date","helpful vote","comment"])
             for review in reviews:
@@ -180,7 +181,7 @@ def run(input_,output,driver_):
                     comment=getComment(soup)
                     writer.writerow([name.encode('utf-8'),ratings,date,helpful,comment.encode('utf-8')])
 
-                except Exception , e:
+                except Exception as e:
                     logger.error('Encountered exception: %s',str(e))
 
         logger.warn('All reviews dumped to file %s',outputFile)
