@@ -88,6 +88,7 @@ def run(input_,output,driver_):
 
     logger.info('Web Driver: %s.',os.path.expanduser(driver_))
     chrome_options = Options()
+    chrome_options.add_argument("--headless")
     driver = webdriver.Chrome(executable_path=os.path.realpath(driver_), chrome_options=chrome_options)
 
     appCounter=-1
@@ -96,7 +97,13 @@ def run(input_,output,driver_):
 
         link=lt+urlSuffix
         driver.get(link)
-        title = driver.find_element_by_xpath('//*[@id="fcxH9b"]/div[4]/c-wiz/div/div[3]/meta[2]').get_attribute('content')
+        actualTitle = driver.title
+        logger.warn('Page Title: %s.',actualTitle)
+
+        #title = driver.find_element_by_xpath('//*[@id="fcxH9b"]/div[4]/c-wiz/div/div[3]/meta[2]').get_attribute('content')
+        #title = driver.find_element_by_xpath('//*[@id="fcxH9b"]/div[4]/c-wiz[2]/div/div[2]/div/div[1]/div/c-wiz/c-wiz/div/div[2]/div/div[1]/c-wiz[1]/h1/span').get_attribute('innerHTML')
+        #title= driver.find_element_by_xpath('/html/body/div[1]/div[4]/c-wiz[2]/div/div[2]/div/div[1]/div/c-wiz/c-wiz/div/div[2]/div/div[1]/c-wiz[1]/h1/span').get_attribute('innerHTML')
+        title = driver.find_element_by_xpath('//h1[@class="AHFaub"]//span').get_attribute('innerHTML')
 
         outputFile=os.path.join(output,obtainOutputFileName(appCounter,title))
 
@@ -125,7 +132,7 @@ def run(input_,output,driver_):
             # "Show More" should now appear
             try:
                 loadMore=driver.find_element_by_xpath("//*[contains(@class,'U26fgb O0WRkf oG5Srb C0oVfc n9lfJ')]").click()
-            except Exception , e:
+            except Exception as e:
                 logger.error('Encountered exception: %s',type(e))
                 flag=flag+1
                 logger.debug('Flag is now %d.',flag)
@@ -139,6 +146,8 @@ def run(input_,output,driver_):
 
 
             iterx=iterx+1
+
+            break
 
 
         # find all reviews
@@ -167,7 +176,7 @@ def run(input_,output,driver_):
         logger.info('dumping reviews to file...')
 
         # dump all reviews to file
-        with open(outputFile, mode='wb') as file:
+        with open(outputFile, mode='w',encoding='utf8') as file:
             writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             writer.writerow(["name","ratings","date","helpful vote","comment"])
             for review in reviews:
@@ -180,7 +189,7 @@ def run(input_,output,driver_):
                     comment=getComment(soup)
                     writer.writerow([name.encode('utf-8'),ratings,date,helpful,comment.encode('utf-8')])
 
-                except Exception , e:
+                except Exception as e:
                     logger.error('Encountered exception: %s',str(e))
 
         logger.warn('All reviews dumped to file %s',outputFile)
