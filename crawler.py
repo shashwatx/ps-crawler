@@ -100,9 +100,6 @@ def run(input_,output,driver_):
         actualTitle = driver.title
         logger.warn('Page Title: %s.',actualTitle)
 
-        #title = driver.find_element_by_xpath('//*[@id="fcxH9b"]/div[4]/c-wiz/div/div[3]/meta[2]').get_attribute('content')
-        #title = driver.find_element_by_xpath('//*[@id="fcxH9b"]/div[4]/c-wiz[2]/div/div[2]/div/div[1]/div/c-wiz/c-wiz/div/div[2]/div/div[1]/c-wiz[1]/h1/span').get_attribute('innerHTML')
-        #title= driver.find_element_by_xpath('/html/body/div[1]/div[4]/c-wiz[2]/div/div[2]/div/div[1]/div/c-wiz/c-wiz/div/div[2]/div/div[1]/c-wiz[1]/h1/span').get_attribute('innerHTML')
         title = driver.find_element_by_xpath('//h1[@class="AHFaub"]//span').get_attribute('innerHTML')
 
         outputFile=os.path.join(output,obtainOutputFileName(appCounter,title))
