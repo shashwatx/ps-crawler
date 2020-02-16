@@ -32,3 +32,8 @@ python crawler.py --help
 ```
 python crawler.py -i ./input.txt -o data/ -d ./assets/chromedriver_linux64
 ```
+
+### Chrome Driver
+```
+wget https://chromedriver.storage.googleapis.com/79.0.3945.36/chromedriver_linux64.zip
+```
